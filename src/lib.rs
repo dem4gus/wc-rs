@@ -23,9 +23,17 @@ mod count_bytes {
     }
 
     #[test]
-    fn correctly_counts_multibyte_characters() {
+    fn counts_multibyte_characters() {
         let input = "孫子";
         let want = 6;
+        let got = count_bytes(input);
+        assert_eq!(got, want);
+    }
+
+    #[test]
+    fn counts_newlines() {
+        let input = "multiline\nstring\n";
+        let want = 17;
         let got = count_bytes(input);
         assert_eq!(got, want);
     }
