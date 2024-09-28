@@ -1,4 +1,4 @@
-fn count_bytes(text: &str) -> usize {
+pub fn count_bytes(text: &str) -> usize {
     text.len()
 }
 
