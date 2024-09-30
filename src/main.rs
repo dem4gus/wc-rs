@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use clap::Parser;
-use wc_rs::{bytes, lines};
+use wc_rs::*;
 
 #[derive(Parser)]
 struct Cli {
@@ -14,6 +14,10 @@ struct Cli {
     /// print the newline counts
     #[arg(short, long)]
     lines: bool,
+
+    /// print the word counts
+    #[arg(short, long)]
+    words: bool,
 }
 
 fn main() {
@@ -28,6 +32,10 @@ fn main() {
 
     if cli.lines {
         count = lines::count(content.as_str());
+    }
+
+    if cli.words {
+        count = words::count(content.as_str());
     }
 
     println!(
