@@ -1,12 +1,10 @@
 use std::path::PathBuf;
 
-use clap::Parser;
+use clap::{Args, Parser};
 use wc_rs::*;
 
-#[derive(Parser)]
-struct Cli {
-    file: PathBuf,
-
+#[derive(Debug, Args)]
+struct CountMode {
     /// print the byte counts
     #[arg(short = 'c', long)]
     bytes: bool,
@@ -20,27 +18,35 @@ struct Cli {
     words: bool,
 }
 
+#[derive(Debug, Parser)]
+struct Cli {
+    file: PathBuf,
+
+    #[command(flatten)]
+    count_mode: CountMode,
+}
+
 fn main() {
-    let cli = Cli::parse();
+    let args = Cli::parse();
 
     let mut count: usize = 0;
-    let content = std::fs::read_to_string(cli.file.as_os_str()).unwrap();
+    let content = std::fs::read_to_string(args.file.as_os_str()).unwrap();
 
-    if cli.bytes {
+    if args.count_mode.bytes {
         count = bytes::count(content.as_str());
     }
 
-    if cli.lines {
+    if args.count_mode.lines {
         count = lines::count(content.as_str());
     }
 
-    if cli.words {
+    if args.count_mode.words {
         count = words::count(content.as_str());
     }
 
     println!(
         "{} {}",
         count,
-        cli.file.file_name().unwrap().to_str().unwrap()
+        args.file.file_name().unwrap().to_str().unwrap()
     );
 }
