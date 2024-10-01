@@ -1,7 +1,5 @@
-use std::path::PathBuf;
-
 use clap::{Args, Parser};
-use wc_rs::*;
+use wc_rs::counter::{CountResult, Mode};
 
 #[derive(Debug, Args)]
 struct CountMode {
@@ -20,7 +18,7 @@ struct CountMode {
 
 #[derive(Debug, Parser)]
 struct Cli {
-    file: PathBuf,
+    file: String,
 
     #[command(flatten)]
     count_mode: CountMode,
@@ -29,24 +27,20 @@ struct Cli {
 fn main() {
     let args = Cli::parse();
 
-    let mut count: usize = 0;
-    let content = std::fs::read_to_string(args.file.as_os_str()).unwrap();
-
+    let mut op_modes = Vec::new();
     if args.count_mode.bytes {
-        count = bytes::count(content.as_str());
+        op_modes.push(Mode::Bytes);
     }
-
     if args.count_mode.lines {
-        count = lines::count(content.as_str());
+        op_modes.push(Mode::Lines);
     }
-
     if args.count_mode.words {
-        count = words::count(content.as_str());
+        op_modes.push(Mode::Words);
     }
 
-    println!(
-        "{} {}",
-        count,
-        args.file.file_name().unwrap().to_str().unwrap()
-    );
+    let content = std::fs::read_to_string(args.file.as_str()).unwrap();
+
+    let counter = CountResult::new(&content, args.file.as_str(), op_modes);
+
+    println!("{}", counter);
 }

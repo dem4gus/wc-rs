@@ -1,5 +1,5 @@
-pub fn count(text: &str) -> usize {
-    text.split_ascii_whitespace().count()
+pub fn count(text: &str) -> u64 {
+    text.split_ascii_whitespace().count() as u64
 }
 
 #[cfg(test)]

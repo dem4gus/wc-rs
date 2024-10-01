@@ -1,5 +1,5 @@
-pub fn count(text: &str) -> usize {
-    text.len()
+pub fn count(text: &str) -> u64 {
+    text.len() as u64
 }
 
 #[cfg(test)]

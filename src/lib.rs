@@ -1,3 +1,5 @@
-pub mod bytes;
-pub mod lines;
-pub mod words;
+pub mod counter;
+
+mod bytes;
+mod lines;
+mod words;

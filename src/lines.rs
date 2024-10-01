@@ -1,9 +1,9 @@
-pub fn count(text: &str) -> usize {
+pub fn count(text: &str) -> u64 {
     return if text.ends_with('\n') {
-        text.lines().count()
+        text.lines().count() as u64
     } else {
         // don't count unterminated lines
-        text.lines().count() - 1
+        (text.lines().count() - 1) as u64
     };
 }
 
