@@ -7,6 +7,10 @@ struct CountMode {
     #[arg(short = 'c', long)]
     bytes: bool,
 
+    // print the character counts
+    #[arg(short = 'm', long)]
+    chars: bool,
+
     /// print the newline counts
     #[arg(short, long)]
     lines: bool,
@@ -30,6 +34,9 @@ fn main() {
     let mut op_modes = Vec::new();
     if args.count_mode.bytes {
         op_modes.push(Mode::Bytes);
+    }
+    if args.count_mode.chars {
+        op_modes.push(Mode::Chars);
     }
     if args.count_mode.lines {
         op_modes.push(Mode::Lines);

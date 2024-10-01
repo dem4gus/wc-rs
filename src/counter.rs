@@ -1,10 +1,11 @@
 use std::{collections::HashMap, fmt::Display};
 
-use crate::{bytes, lines, words};
+use crate::*;
 
 #[derive(Eq, PartialEq, Debug, Hash)]
 pub enum Mode {
     Bytes,
+    Chars,
     Lines,
     Words,
 }
@@ -22,6 +23,7 @@ impl CountResult {
         for mode in modes {
             let total = match mode {
                 Mode::Bytes => bytes::count(text),
+                Mode::Chars => chars::count(text),
                 Mode::Lines => lines::count(text),
                 Mode::Words => words::count(text),
             };
@@ -34,7 +36,7 @@ impl CountResult {
     }
 }
 
-const REPORT_ORDER: [Mode; 3] = [Mode::Lines, Mode::Words, Mode::Bytes];
+const REPORT_ORDER: [Mode; 4] = [Mode::Lines, Mode::Words, Mode::Chars, Mode::Bytes];
 
 impl Display for CountResult {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -74,6 +76,21 @@ mod test {
     fn counts_only_words() {
         let want = "5 foo.txt";
         let got = format!("{}", CountResult::new(INPUT, FILENAME, vec![Mode::Words]));
+        assert_eq!(want, got);
+    }
+
+    #[test]
+    fn counts_only_chars() {
+        let want = "22 foo.txt";
+        let got = format!("{}", CountResult::new(INPUT, FILENAME, vec![Mode::Chars]));
+        assert_eq!(want, got);
+    }
+
+    #[test]
+    fn multiple_count_modes() {
+        let want = "1 5 22 foo.txt";
+        let test_modes = vec![Mode::Bytes, Mode::Words, Mode::Lines];
+        let got = format!("{}", CountResult::new(INPUT, FILENAME, test_modes));
         assert_eq!(want, got);
     }
 }
