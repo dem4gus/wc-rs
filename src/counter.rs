@@ -2,7 +2,7 @@ use std::{collections::HashMap, fmt::Display};
 
 use crate::*;
 
-#[derive(Eq, PartialEq, Debug, Hash)]
+#[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub enum Mode {
     Bytes,
     Chars,

@@ -28,6 +28,8 @@ struct Cli {
     count_mode: CountMode,
 }
 
+const DEFAULT_MODES: [Mode; 3] = [Mode::Bytes, Mode::Lines, Mode::Words];
+
 fn main() {
     let args = Cli::parse();
 
@@ -43,6 +45,9 @@ fn main() {
     }
     if args.count_mode.words {
         op_modes.push(Mode::Words);
+    }
+    if op_modes.is_empty() {
+        op_modes = DEFAULT_MODES.to_vec();
     }
 
     let content = std::fs::read_to_string(args.file.as_str()).unwrap();
