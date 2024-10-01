@@ -1,3 +1,5 @@
+use std::io;
+
 use clap::{Args, Parser};
 use wc_rs::counter::{CountResult, Mode};
 
@@ -22,7 +24,7 @@ struct CountMode {
 
 #[derive(Debug, Parser)]
 struct Cli {
-    file: String,
+    file: Option<String>,
 
     #[command(flatten)]
     count_mode: CountMode,
@@ -50,9 +52,16 @@ fn main() {
         op_modes = DEFAULT_MODES.to_vec();
     }
 
-    let content = std::fs::read_to_string(args.file.as_str()).unwrap();
+    let content = match args.file {
+        Some(ref filename) => std::fs::read_to_string(filename).unwrap(),
+        None => io::read_to_string(io::stdin()).unwrap(),
+    };
 
-    let counter = CountResult::new(&content, args.file.as_str(), op_modes);
+    let counter = CountResult::new(
+        &content,
+        args.file.unwrap_or(String::from("")).as_str(),
+        op_modes,
+    );
 
     println!("{}", counter);
 }
